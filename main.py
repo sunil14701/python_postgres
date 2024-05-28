@@ -35,6 +35,24 @@ def get_posts():
 #     print(payload)
 #     return {"message":f"new post created with title:{payload['title']} and content:{payload['content']}"}
 
+@app.get("/posts/latest")
+def get_latest_posts():
+    if len(my_posts) <= 0:
+        return {"message":"No post yet"}
+    return {"data":my_posts[-1]}
+
+# path parameters should come last as they could mistakely execute earlier for same http method. so path paramets follow top down approach
+# path parameter included. if we are not specifing the datatype of path parameter explicitly than it will always be returned as str
+@app.get("/posts/{post_id}")
+def get_post_by_id(post_id:int,):
+    # print(post_id, type(post_id))
+    for item in my_posts:
+        if item.get('id') == post_id:
+            return item
+
+    return {"message":f"No post found with id = {post_id}"}
+
+
 @app.post("/posts")
 def create_posts(new_post: Post): #retrived body raw data from postman
 
@@ -50,16 +68,6 @@ def create_posts(new_post: Post): #retrived body raw data from postman
     my_posts.append(new_post_dict)
     return {"message":f"new post created with title:{new_post.title} and content:{new_post.content}"}
 
-
-# path parameter included. if we are not specifing the datatype of path parameter explicitly than it will always be returned as str
-@app.get("/posts/{post_id}")
-def get_post_by_id(post_id:int,):
-    # print(post_id, type(post_id))
-    for item in my_posts:
-        if item.get('id') == post_id:
-            return item
-
-    return {"message":f"No post found with id = {post_id}"}
 
 
 
