@@ -1,1 +1,1 @@
-# python project
+# python project: social media API
