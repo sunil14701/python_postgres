@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Response, status, HTTPException
 from fastapi.params import Body
 from pydantic import BaseModel
 from typing import Optional
@@ -41,19 +41,21 @@ def get_latest_posts():
         return {"message":"No post yet"}
     return {"data":my_posts[-1]}
 
-# path parameters should come last as they could mistakely execute earlier for same http method. so path paramets follow top down approach
+# path parameters should come last as they could mistakely execute earlier for same http method. As path paramets follow top down approach
 # path parameter included. if we are not specifing the datatype of path parameter explicitly than it will always be returned as str
 @app.get("/posts/{post_id}")
-def get_post_by_id(post_id:int,):
+def get_post_by_id(post_id:int, response: Response):
     # print(post_id, type(post_id))
     for item in my_posts:
         if item.get('id') == post_id:
             return item
 
-    return {"message":f"No post found with id = {post_id}"}
+    # response.status_code = status.HTTP_404_NOT_FOUND
+    # return {"message":f"No post found with id = {post_id}"}     
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                        detail=f"No post found with id = {post_id}")
 
-
-@app.post("/posts")
+@app.post("/posts",status_code=status.HTTP_201_CREATED)
 def create_posts(new_post: Post): #retrived body raw data from postman
 
     # new_post is a data type pydantic model and we can convert it into a dict
@@ -66,7 +68,7 @@ def create_posts(new_post: Post): #retrived body raw data from postman
     new_post_dict["id"] = cnt
     # print(new_post)
     my_posts.append(new_post_dict)
-    return {"message":f"new post created with title:{new_post.title} and content:{new_post.content}"}
+    return {"message":f"new post created with title:{new_post.title} and content:{new_post.content}"}, 201
 
 
 
