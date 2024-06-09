@@ -68,7 +68,17 @@ def create_posts(new_post: Post): #retrived body raw data from postman
     new_post_dict["id"] = cnt
     # print(new_post)
     my_posts.append(new_post_dict)
-    return {"message":f"new post created with title:{new_post.title} and content:{new_post.content}"}, 201
+    return {"message":f"new post created with title:{new_post.title} and content:{new_post.content}"}
+
+@app.delete("/posts/{post_id}", status_code=status.HTTP_204_NO_CONTENT)
+def remove_post(post_id:int, ):
+    for index, post in enumerate(my_posts):
+        if post["id"] == post_id:
+            del my_posts[index]
+            # return {"message":"Post is successfully deleted"} do not return for deleting
+            return Response(status_code= status.HTTP_204_NO_CONTENT)
+    
+    raise HTTPException(status_code= status.HTTP_404_NOT_FOUND, detail=f"No post exist for id: {post_id}")
 
 
 
