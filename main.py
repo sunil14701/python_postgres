@@ -13,6 +13,11 @@ class Post(BaseModel):
     published: bool = True 
     location: Optional[int] = None
 
+# class update_post(BaseModel):
+#     title: str 
+#     content: str
+
+
 # store posts in memory if application restart we will lose our data
 cnt = 2
 my_posts = [{"title":"Top beaches in florida", "content":"Checkout these awesome beaches","published":False,"id":1},
@@ -69,6 +74,19 @@ def create_posts(new_post: Post): #retrived body raw data from postman
     # print(new_post)
     my_posts.append(new_post_dict)
     return {"message":f"new post created with title:{new_post.title} and content:{new_post.content}"}
+
+@app.put("/posts/{post_id}", status_code=status.HTTP_202_ACCEPTED)
+def update_post(post_id:int, post_updated: Post):
+
+    for index, post in enumerate(my_posts):
+        if post["id"] == post_id:
+            post_updated_dict = post_updated.model_dump()
+            post_updated_dict['id'] = post_id
+            my_posts[index] = post_updated_dict
+            return {"detail": "Updated post successfull"}
+    
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"No post exist for id:{post_id}")
+
 
 @app.delete("/posts/{post_id}", status_code=status.HTTP_204_NO_CONTENT)
 def remove_post(post_id:int, ):
