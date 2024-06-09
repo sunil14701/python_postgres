@@ -108,3 +108,5 @@ def remove_post(post_id:int, ):
 # browser send get method by default
 # postman replaces webbrowser when we don't want frontend 
 # post method: send some data to server
+# documenation docs and redoc in localhost
+# packages is fancy name of folder, it should contain __init__.py file which is empty. uvicorn app.main:app -> in app folder there is a main file that has our app 
