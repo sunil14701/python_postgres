@@ -2,6 +2,8 @@ from fastapi import FastAPI, Response, status, HTTPException
 from fastapi.params import Body
 from pydantic import BaseModel
 from typing import Optional
+import psycopg2
+from psycopg2.extras import RealDictCursor
 
 app = FastAPI()
 
@@ -11,11 +13,19 @@ class Post(BaseModel):
     title: str
     content: str
     published: bool = True 
-    location: Optional[int] = None
 
 # class update_post(BaseModel):
 #     title: str 
 #     content: str
+
+try:
+    conn = psycopg2.connect(host='localhost', database='fastapi_postres', user='postgres',
+                           password='7087',cursor_factory=RealDictCursor)
+    cursor = conn.cursor()
+    print('Database connected successfull')
+except Exception as error:
+    print("Connecting to database failed")
+    print("Error: ", error)
 
 
 # store posts in memory if application restart we will lose our data
@@ -110,3 +120,17 @@ def remove_post(post_id:int, ):
 # post method: send some data to server
 # documenation docs and redoc in localhost
 # packages is fancy name of folder, it should contain __init__.py file which is empty. uvicorn app.main:app -> in app folder there is a main file that has our app 
+
+
+# SQL
+# delete from products where id = 8 returning * -> delete row will be returned
+# insert into products(name, price) values ('Vape',1) returning id, name -> after inserting return inserted row
+
+# post table
+# create table post(
+# 	id serial primary key,
+# 	title varchar(255) not null,
+# 	content text,
+# 	published bool default false ,
+# 	created_at timestamptz not null default now()
+# )
