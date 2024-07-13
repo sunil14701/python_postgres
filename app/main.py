@@ -79,7 +79,7 @@ def get_post_by_id(post_id:int, response: Response):
 
 @app.post("/posts",status_code=status.HTTP_201_CREATED)
 def create_posts(new_post: Post): #retrived body raw data from postman
-
+    print(new_post.title.format())
     # new_post is a data type pydantic model and we can convert it into a dict
     # print(new_post.dict())
     # print(new_post.model_dump())
