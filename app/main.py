@@ -2,10 +2,11 @@ from fastapi import FastAPI, Response, status, HTTPException
 from fastapi.params import Body
 from pydantic import BaseModel
 from typing import Optional
-import psycopg2
-from psycopg2.extras import RealDictCursor
+# import psycopg2
+# from psycopg2.extras import RealDictCursor
 import time
 
+# fastapi instance 
 app = FastAPI()
 
 # validation and schema set of payload send from Frontend
@@ -19,17 +20,17 @@ class Post(BaseModel):
 #     title: str 
 #     content: str
 
-while True:
-    try:
-        conn = psycopg2.connect(host='localhost', database='postgres', user='postgres',
-                            password='7087',cursor_factory=RealDictCursor)
-        cursor = conn.cursor()
-        print('Database connected successfull')
-        break
-    except Exception as error:
-        print("Connecting to database failed")
-        print("Error: ", error)
-        time.sleep(3)
+# while True:
+#     try:
+#         conn = psycopg2.connect(host='localhost', database='postgres', user='postgres',
+#                             password='7087',cursor_factory=RealDictCursor)
+#         cursor = conn.cursor()
+#         print('Database connected successfull')
+#         break
+#     except Exception as error:
+#         print("Connecting to database failed")
+#         print("Error: ", error)
+#         time.sleep(3)
 
 
 
@@ -39,17 +40,17 @@ my_posts = [{"title":"Top beaches in florida", "content":"Checkout these awesome
             {"title":"Top beaches in florida 2", "content":"Checkout these awesome beaches 2","published":False,"id":2}]
 
 
-# routes aka path operations(decorator + function)
+# routes aka path operation(decorator + function)
 @app.get("/")
 def root():
     return {"message": "Welcome to my API"}
 
 @app.get("/posts")
 def get_posts():
-    cursor.execute(''' select * from post''')
-    post = cursor.fetchall()
+    # cursor.execute(''' select * from post''')
+    # post = cursor.fetchall()
     # return {"message":"these are posts."}
-    return {"data":post}
+    return {"data":my_posts}
 
 
 # @app.post("/create_post")
@@ -121,7 +122,7 @@ def remove_post(post_id:int, ):
 # json is main language for API
 # webserver is hosted on localhost:8000
 # google http methods
-# if both decorators have same name like / than first one in that file will take into effect. order matters of path operators
+# if both decorators have same name like / than first one in that file will take into effect. order matters of path operators. request has two component -> method + path 
 # browser send get method by default
 # postman replaces webbrowser when we don't want frontend 
 # post method: send some data to server
@@ -141,3 +142,5 @@ def remove_post(post_id:int, ):
 # 	published bool default false ,
 # 	created_at timestamptz not null default now()
 # )
+
+# 1:17:00
