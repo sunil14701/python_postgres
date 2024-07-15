@@ -1,0 +1,28 @@
+** python API development course
+
+1. full API making that includes authentication, CRUD operation, validation, documentation.
+
+2. SQL
+
+3. intergrate SQL db to API using 2 methods i.e raw SQL queries and ORM's.
+
+4. Alembic: db migration tool.
+
+5. postman
+
+6. automated integration test
+
+7. deployment -> 1. ubuntu machine on aws and setup enginx to act as reverse proxy, configure own system dservice, setup firewall to block non http trafic, setup SSL: handle https traffic. 
+                 2. heruku: free deployment 
+
+8. docker
+
+9. cicd pipeline using github actions. run pipeline, pull code, run integration tests, run images, push our changes to prod env 
+
+
+** techstack
+
+1. python 
+2. fastapi  
+3. postgres
+4. sqlalchemy
